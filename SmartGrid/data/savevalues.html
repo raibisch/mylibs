@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+   <title>Config</title>
+   <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport">
+   <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<table>
+   <form action="savevalues.html" method="POST">
+     <p>Cost akt. Month</p>
+     <textarea id="TA_MDAY" autocorrect="off" name="savemonthday">%COST_AKT_MONTH%</textarea>
+     <p><button class="buttonlink" type="submit">akt.Month save</button></p>
+   </form>
+   <p><a class="buttonlink" href="cost_akt_month.txt" download>download</a></p>
+</table>
+
+<table>
+  <form action="savevalues.html" method="POST">
+    <p>Cost akt. Year</p>
+    <textarea id="TA_MONTH" autocorrect="off" name="savemonth">%COST_AKT_YEAR%</textarea>
+    <p><button class="buttonlink" type="submit">akt.Year save</button></p>
+  </form>
+  <p><a class="buttonlink" href="cost_akt_year.txt" download>download</a></p>
+</table>
+
+
+<button type="button" class="image-btn" onclick="window.location.href='index.html'"><img src="home.png">Home</button>
+<button style="width: 100px;" type="button" class="image-btn" > </button>
+<button type="button" class="image-btn" onclick="window.location.href='setup.html'"><img src="settings.png">Setup</button>
+
+
+<script type="text/javascript">
+
+/* funktioniert, liefert aber bein zurücklesen eine falschen String zurück - unklar warum ??
+
+  function reqListener1()
+  {
+    document.getElementById('TA_MDAY').innerHTML = this.responseText;   
+    
+  } 
+
+  function reqListener2()
+  {
+    document.getElementById('TA_MONTH').innerHTML = this.responseText;       
+  } 
+ 
+ 
+ window.onload = function () 
+       {
+        //oReq1.open("GET", "cost_akt_month.txt");
+        //oReq1.send();
+        
+        //oReq2.open("GET", "cost_akt_year.txt");
+        //oReq2.send();
+       }
+ 
+var oReq1 = new XMLHttpRequest();
+oReq1.addEventListener("load", reqListener1);
+
+var oReq2 = new XMLHttpRequest();
+oReq2.addEventListener("load", reqListener2);
+*/
+
+ </script>
+</body>
+</html>
+     

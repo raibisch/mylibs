@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<html>
+<head>  
+  <title>Flex vs Fix-Price</title>
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=yes" name="viewport">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+  <body>
+      <form action="info.html" method="POST">
+      <p>Engergy Cost-Info in &euro;</p>
+      <div class="textarea-container">
+
+      <textarea autocorrect="off" name="info">%COSTINFO%</textarea>    <!----> 
+      <!---- for debuging
+      <textarea autocorrect="off" name="info">Fix-Price:28.0 &nbsp; Flex-Price :32.1&nbsp; Hour-kWh: 0.077 
+Hour-flex :0.02 &nbsp;Day-flex :4.40 &nbsp; Month-flex :22.68
+Hour-fix  :0.02  &nbsp;Day-fix :3.64 &nbsp; Month-fix  :21.54</textarea>   
+      --->
+      </div>
+      </form>
+      <div class="chart-container" >
+      <canvas id="hourChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="monthdayChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="monthChart"></canvas>
+      </div>
+     
+    <button type="button" class="image-btn" onclick="window.location.href='index.html'"><img src="home.png">Home</button>
+    <button type="button" class="image-btn" onclick="window.location.href='savevalues.html'"><img src="settings.png">History-Values</button>
+  
+    <script type="text/javascript">
+
+      const ctx_hour = document.getElementById('hourChart');
+      const ctx_monthday = document.getElementById('monthdayChart');
+      const ctx_month = document.getElementById('monthChart');
+      var chartColors = {gray: 'gray',red: 'red', green: 'green', yellow: 'orange', orange: 'darkorange', blue: 'blue',};
+
+      var xvarhour      = ["00:00","1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"," 19:00", "20:00", "21:00", "22:00", "23:00"];
+      var xvarmonthday  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","20","30", "31"];
+      var xvarmonth     =["01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11","12"];
+      //* for build
+      var Fixcent = "Fix:" + %PRICE_FIX%+ "cnt";
+      var yvarhourFlo = [%PRICE_HOUR_FLEX%];  
+      var yvarhourFix =  [%PRICE_HOUR_FIX%];
+      var yvarmonthdayFlo = [%PRICE_MONTHDAY_FLEX%];
+      var yvarmonthdayFix = [%PRICE_MONTHDAY_FIX%];
+      var yvarmonthFlo = [%PRICE_MONTH_FLEX%];
+      var yvarmonthFix = [%PRICE_MONTH_FIX%];
+      var yvarepex  = [%EPEX_ARRAY%];
+      var costMwst  = %COST_MWST%;
+      var costFix   = %COST_FIX%;
+      //*/
+
+      /* for debuging 
+      var yvarhourFlo =  [ 1.10, 1.20, 1.1, 1.1, 0.5, 0.5, 1.5, 1.0, 1.8, 2.1, 2.0, 2.0, 3.0, 5.5, 3.6, 3.5, 2.6, 2.7, 2.7, 0.4, 0.5, 0.5, 0.2, 0.1];  
+      var yvarhourFix =  [ 1.20, 1.30, 1.0, 1.1, 0.5, 0.6, 1.1, 1.7, 1.9, 2.6, 2.6, 2.6, 3.1, 5.7, 3.6, 3.5, 2.6, 2.7, 2.7, 0.6, 0.7, 0.7, 0.6, 0.3];
+      var Fixcent = "Fix:" + 26.1 + "cnt";
+      var costMwst =19;
+      var costFix =17.51;
+
+      // https://masteringjs.io/tutorials/chartjs/two-y-axes
+      var yvarepex =    [ 60.08,  60.05,  58.93,  62.46,  76.82,  85.18, 102.38, 117.95, 100.69, 75.17,  59.21,  36.46,   36.18,   35.59,   33.63,     35.57,   47.68,   85.75,   104.73,  180.04,  204.57,  108.55,  87.29,   81.15];
+      var yvarmonthdayFlo = [5.0, 6.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 4.0, 4.0, 5.0, 6.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0 ];
+      var yvarmonthdayFix = [7.0, 6.8, 7.0, 7.0, 7.0, 8.0, 5.0, 4.0, 4.0, 4.3, 4.0, 5.0, 6.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0 ];
+      var yvarmonthFlo = [81, 73, 78, 73, 61, 51, 40.0, 45.0, 65.0, 64.0, 64.0, 85.0];
+      var yvarmonthFix = [80, 70, 76, 72, 70, 53, 48.0, 44.0, 67.0, 64.0, 68.0, 85.0]; 
+      //*/
+
+      var yvarepexcent = [];
+      for (let index = 0; index < yvarepex.length; index++) 
+      {
+       if (yvarepex[index] < 999.0)
+       {
+        yvarepexcent[index] = (yvarepex[index] / 10) + (yvarepex[index]*(costMwst/1000.0)) + costFix;
+       } 
+       else
+       {
+        yvarepexcent[index] = 0.0;
+       }
+      
+      }
+
+      var Charthour = new Chart(ctx_hour, {
+                  type: "bar",
+                  title: "EPEX cent/kWh",
+                  options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                       y: { min:0} ,
+                       B: {
+                          type: 'linear',
+                          position: 'right',
+                          ticks: { beginAtZero: true, color: 'blue' },
+                          grid: { display: false }
+                          },
+                    },
+                    plugins: 
+                    {
+                        title: {
+                         display: true,
+                         text: 'Euro / h',
+                        }
+                    }
+                  },
+                  data: {
+                         labels: xvarhour,
+                         datasets: [
+                                    {
+                                     label: Fixcent,
+                                     backgroundColor: [chartColors.gray],
+                                     borderRadius: 6,
+                                     data: yvarhourFix,
+                                    },
+                                    {
+                                     label: "Flex",
+                                     backgroundColor: [chartColors.blue],
+                                     borderRadius: 6,
+                                     data: yvarhourFlo,
+                                    },
+                                    {
+                                      type: 'line',
+                                      yAxisID: 'B', // <-- the Y axis to use for this data set
+                                      label: 'EPEX-Price ct',
+                                      data: yvarepexcent,
+                                      backgroundColor: 'blue',
+                                      borderColor: [chartColors.orange],
+                                    },
+                                   ],
+                  },
+      });
+
+      
+      var Chartmonthday = new Chart(ctx_monthday, {
+                  type: "bar",
+                  title: "EPEX cent/kWh",
+                  options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                       y: { min:0} 
+                    },
+                    plugins: 
+                    {
+                        title: {
+                         display: true,
+                         text: 'Euro / day',
+                        }
+                    }
+                  },
+                  data: {
+                         labels: xvarmonthday,
+                         datasets: [
+                                    {
+                                     label: Fixcent,
+                                     backgroundColor: [chartColors.gray],
+                                     borderRadius: 6,
+                                     data: yvarmonthdayFix,
+                                    },
+                                    {
+                                     label: "Flex",
+                                     backgroundColor: [chartColors.blue],
+                                     borderRadius: 6,
+                                     data: yvarmonthdayFlo,
+                                    },
+                                   ],
+                  },
+      });
+      
+       
+      var Chartmonth = new Chart(ctx_month, {
+                  type: "bar",
+                  title: "Euro / month",
+                  options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { 
+                       y: { min:0} 
+                    },
+                    plugins: 
+                    {
+                        title: {  
+                         display: true,
+                         text: 'Euro / Month',
+                        }
+                    }
+                  },
+                  data: {
+                         labels: xvarmonth,
+                         datasets: [
+                                    {
+                                     label: Fixcent,
+                                     backgroundColor: [chartColors.gray],
+                                     borderRadius: 6,
+                                     data: yvarmonthFix,
+                                    },
+                                    {
+                                     label: "Flex",
+                                     backgroundColor: [chartColors.blue],
+                                     borderRadius: 6,
+                                     data: yvarmonthFlo,
+                                    },
+                                   ],
+                  },
+      });
+      
+
+      function setFloatColor(chart) 
+      {
+        var datasetfix = chart.data.datasets[0];
+        var datasetflo = chart.data.datasets[1];
+        for (var i = 0; i < datasetfix.data.length; i++) 
+        {
+         if (datasetfix.data[i] < datasetflo.data[i])
+         { 
+          datasetflo.backgroundColor[i] = chartColors.red;
+         }
+         else
+         {
+           datasetflo.backgroundColor[i] = chartColors.green;
+         }
+         chart.update();
+       }
+      }
+
+      window.onload = function () 
+      {
+       setFloatColor(Charthour);
+       setFloatColor(Chartmonthday);
+       setFloatColor(Chartmonth);
+      }
+
+     /*
+     function myRefresh ()
+     {
+      window.location.href = "energycost.html";
+     }
+     setInterval(function()
+            {
+              myRefresh();
+            }, 5000);
+    */
+     
+    </script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>%DEVICEID%</title>
+        <meta content="width=device-width, initial-scale=0.8, user-scalable=yes" name="viewport">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <meta charset="UTF-8">
+        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+        <link rel="icon" sizes="192x192" href="android-chrome-192x192.png">
+        <link rel="icon" sizes="384x384" href="android-chrome-384x384.png">
+        <link rel="icon" href="favicon.ico">
+        <link rel="manifest" href="manifest.json">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body >
+      <h2>%DEVICEID%</h2>
+      <div class="outerring" id="RING_ID">
+       <div class="innerring"></div>
+       <div id="PRICE" class="ringtext_value">---</div>
+       <div class="ringtext_unit">kWh[cent]</div>
+       <div class="ringtext_time" id="TIME">--:--</div>
+       <div class="ringtext_status1" id="WP_STATUS">--</div>
+       <div class="ringtext_status2" id="SGR_STATUS">--</div>
+     </div>
+      <table>
+            <tr>
+              <td id="EL_WATT">--</td>
+              <td id="EL_KWH">--</td>
+            </tr>
+            <tr>
+              <th>[Watt]</th>
+              <th>[kW/h]</th>
+            </tr>
+      </table>
+    <button type="button" class="image-btn" onclick="window.location.href='log.html'"><img src="file-list.png">Log</button>
+    <button type="button" class="image-btn" onclick="window.location.href='energycost.html'"><img src="energycost.png">Cost</button> 
+    <button type="button" class="image-btn" onclick="window.location.href='setup.html'"><img src="settings.png">Setup</button>
+         
+    <script type="text/javascript">
+            //var t = new Date();
+            var price_low = %PRICE_LOW%;
+            var price_high= %PRICE_HIGH%;
+            function reqListener ()
+            {
+              var myResponse = this.responseText;
+              //myResponse = myResponse.toUpperCase();
+              //console.log(this.responseText);
+              var myArray = myResponse.split(",");
+            
+              //console.log(myArray);
+              var sgrStatus = String(myArray[1]);
+              var price     = myArray[4];
+           
+              if (myArray[1] != null)
+              {
+               document.getElementById('TIME').innerHTML = myArray[0];
+               document.getElementById('SGR_STATUS').innerHTML  = "SGready-Mode:" + sgrStatus;
+               
+               //wpStatus = myArray[2]; // 0=aus, 1=Heiz, 2=WW
+               
+               document.getElementById('PRICE').innerHTML  = price;
+               document.getElementById('EL_WATT').innerHTML = myArray[2]; 
+               document.getElementById('EL_KWH').innerHTML = myArray[3]; 
+              }
+             
+              // example : https://code-boxx.com/change-override-css-with-javascript
+              //if (sgrStatus.startsWith('1'))
+              if (price < price_low)
+              {
+                //document.getElementById('SGR_STATUS').style.color = 'blue';
+                // in Zukunft nur bei WP-on blinken
+                //document.getElementById('RING_ID').className = "outerring_blink";
+                document.getElementById('RING_ID').style.background = 'green';
+              }
+              //else if (sgrStatus.startsWith('2'))
+              else if (price >= price_high)
+              {
+                //document.getElementById('SGR_STATUS').style.color = 'green';
+                 // in Zukunft nur bei WP-on blinken
+                //document.getElementById('RING_ID').className = "outerring_blink";    
+                document.getElementById('RING_ID').style.background = 'red'; 
+                document.getElementById('RING_ID').className = "outerring_blink";
+              }
+              //else if (sgrStatus.startsWith('3'))
+              else if ( price <= price_high)
+              {
+                 document.getElementById('RING_ID').style.background = 'orange';
+              }
+              //else
+              //{
+                //document.getElementById('SGR_STATUS').style.color = 'red';
+                 // in Zukunft nur bei WP-on blinken
+                //document.getElementById('RING_ID').className = "outerring_blink";
+              //  document.getElementById('RING_ID').style.background = 'red';
+              //}
+              else
+              {
+                document.getElementById('RING_ID').style.background = 'black';
+              }
+
+            }
+            var oReq = new XMLHttpRequest();
+            oReq.addEventListener("load", reqListener);
+            setInterval(function()
+            {
+              oReq.open("GET", "/fetch");
+              oReq.send();
+            }, 2000);
+    </script>
+    </body>
+</html>
