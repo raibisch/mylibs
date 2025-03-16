@@ -9,15 +9,19 @@ Dies ermöglicht Werte der Steuerung über MODBUS-TCP zu lesen und schreiben. Di
 
 Das Interface ist beschränkt auf Werte für die Leistungsbegrenzung nach Par. 14a EnWG als auch zur internen Leistungsoptimierung über ein Smart-Grid-Gateway. Natürlich kann man auch eine bestehende Home-Automation Software (HomeAssistant, Domoticz, ....) einbinden. Oder - ich ich es realisiert habe - ein eigenes Programm-Modul für einen ESP32-Microcontroler schreiben und damit einen eigenen "Smart-Grid-Controller" bauen.
 
-
 Von AIT wird ein solches Modul auch angeboten [AIT-SolarManager](https://www.novelan.com/download/18.2db41e671932967a1fc141/1731581284379/AIT_Anleitung_SolarManager.pdf)
 ...leider gibt es aber keine offizielle Doku der Schnittstelle. 
+
+## ESP32 lib 'LuxModbusSHI'
+
+[LuxModbusSHI](../LuxModbusSHI)
+
+## Aktivierung
 
 > Für die nachfolgenden Infos sind grundlegende Kenntnisse über das MODBUS-Protokoll notwendig !! Alle Infos sind ohne Gewähr und auf eigene Gefahr anzuwenden.
 
 > Anmerkung: es wird keine zusätzliceh "GLT"-Lizenz benötig (eine parallele Nutzung ist aber möglich). Es muss lediglich die Funktion im "Kundendienst-Modus" aktiviert werden.
 
-## Aktivierung
 SERVICE --> Systemsteuerung --> Konnektivität --> Smart-Home-Interface
 
 Modbus-TCP aktiv schalten:
