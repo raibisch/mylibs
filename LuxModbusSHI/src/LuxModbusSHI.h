@@ -60,7 +60,7 @@ class LuxModbusSHI: private ModbusTCPClient
    LuxModbusSHI() : LuxModbusSHI(_wificlient){};
    
    bool init(const char* sIP);
-   bool loop();
+   bool poll();
 
    int readRegister(SHI_MODBUS_REGISTER reg);
    int readInput(SHI_MODBUS_INPUT reg);
@@ -72,7 +72,7 @@ class LuxModbusSHI: private ModbusTCPClient
    int getPCSetpointX10()   {return _pc_setpoint;};
 
    //bool     setHeatSetpoint(uint16_t tempx10);
-   bool     setHeatOffset(uint16_t tempx10);
-   bool     setPCSetpoint(uint16_t kwx10);
+   bool     setHeatOffset(uint16_t tempx10, uint16_t mode);
+   bool     setPCSetpoint(uint16_t kwx10, uint16_t mode);
 };
 

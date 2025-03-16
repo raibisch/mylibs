@@ -29,7 +29,12 @@ int LuxModbusSHI::readInput(SHI_MODBUS_INPUT reg)
 void LuxModbusSHI::readValues()
 {
   readInput(SHI_MODBUS_INPUT::TEMP_OUTDOOR);
-  readRegister(SHI_MODBUS_REGISTER::PC_SETPOINT);
+
+  readRegister(SHI_MODBUS_REGISTER::HEAT_MODE);
+  readRegister(SHI_MODBUS_REGISTER::HEAT_OFFSET);
+  //readRegister(SHI_MODBUS_REGISTER::HEAT_SETPOINT);
+  //readRegister(SHI_MODBUS_REGISTER::PC_MODE);
+  //readRegister(SHI_MODBUS_REGISTER::PC_SETPOINT);
   
   // ... Add more function or define in derivied class
   //debug_println("Warning: no LuxModbusSHI.getvalues()  defined, derivate class");
@@ -38,7 +43,7 @@ void LuxModbusSHI::readValues()
 
 /// @brief  integrate in main loop() with some timer (dont call more than one sec. per loop)
 /// @return connected() status
-bool LuxModbusSHI::loop()
+bool LuxModbusSHI::poll()
 {
  
   if (!connected() ) 
@@ -69,18 +74,17 @@ bool LuxModbusSHI::loop()
 }
 
 
-bool LuxModbusSHI::setHeatOffset(uint16_t tempx10)
+bool LuxModbusSHI::setHeatOffset(uint16_t tempx10, uint16_t mode)
 {
   int iret = 0;
   iret = this->holdingRegisterWrite(SHI_MODBUS_REGISTER::HEAT_OFFSET, tempx10);
-  if (iret > 0)
-  {
-   iret = this->holdingRegisterRead(SHI_MODBUS_REGISTER::HEAT_MODE, 2);
-  }
+  iret = this->holdingRegisterWrite(SHI_MODBUS_REGISTER::HEAT_MODE, uint16_t(0));
+ 
+  debug_printf("setHeatOffset: val:%d  mode:%d\r\n", tempx10, mode);
   return iret;
 }
 
-bool LuxModbusSHI::setPCSetpoint(uint16_t tempx10)
+bool LuxModbusSHI::setPCSetpoint(uint16_t tempx10, uint16_t mode)
 {
   int iret = 0;
   iret = this->holdingRegisterWrite(SHI_MODBUS_REGISTER::PC_SETPOINT, tempx10);
@@ -88,6 +92,8 @@ bool LuxModbusSHI::setPCSetpoint(uint16_t tempx10)
   {
    iret = this->holdingRegisterRead(SHI_MODBUS_REGISTER::PC_MODE, 2);
   }
+  debug_printf("setPCSetpoint: val:%d  mode:%d\r\n", tempx10, mode);
+ 
   return iret;
 }
 
