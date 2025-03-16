@@ -1,7 +1,7 @@
  
  # Luxtronik Smart-Home-Interface (Modbus-TCP)
 
- (because this is related to a german version of the "Luxtronik" Heatpump Controller the description is in german, please use a translate function to get english or other translation, buit it is no problem to communicate any issues and questions in english)
+ (because this is related to a german version of the "Luxtronik" Heatpump Controller, the following description is in german, please use a translate function to get english or other translations, but there is no problem to communicate any issues and questions in english)
 
 Ab  Software-Version V3.90.3 gibt es die neue Funktion "Smart-Home-Interface" (SHI) in der Luxtronik Wärmepumpen Steuerung. 
 
@@ -68,12 +68,12 @@ Hinweis: es gibt verschiedene Zählweisen für die Modbus-Register "0" oder "1" 
 
 ## Quelle meiner Infos 
 
-Hier wird auch über Details der einzelnen Werte diskutiert und weitere Erkenntnisse geteilt. Man muss oft ein wenig ind den Themenseiten blättern...findet dort aber sehr gute Infos. 
-(Vielen Dank an alle aktiven Teilnehmer des Forums)
-
 [Haustechnikdialog Luxtronik SHI-Interface](https://www.haustechnikdialog.de/Forum/t/284442/Eigene-Regelung-PV-Luxtronik-2-1-Smart-Home-Interface-SHI)
 
 [Haustechnikdialog Luxtronik Firmware](https://www.haustechnikdialog.de/Forum/t/272274/Alpha-Innotec-Firmware?page=25)
+
+Hier wird auch über Details der einzelnen Werte diskutiert und weitere Erkenntnisse geteilt. Man muss oft ein wenig in den Themenseiten blättern...findet dort aber sehr gute Infos. 
+(Vielen Dank an alle aktiven Teilnehmer des Forums)
 
 
 
