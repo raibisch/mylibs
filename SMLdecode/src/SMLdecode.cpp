@@ -23,7 +23,7 @@ String SMLdecode::httpGETRequest(const char* http_url)
   HTTPClient http;
     
   // Your Domain name with URL path or IP address with path
-  http.begin(wificlient, http_url);
+  http.begin(_wificlient, http_url);
   
   // If you need Node-RED/server authentication, insert user and password below
   //http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");

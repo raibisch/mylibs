@@ -551,12 +551,12 @@ bool  LuxWebsocket::XMLREFRESH(LUX_VAL_TYPE valtype, int endoffset)
         _hp_state = LUX_HEATPUMP_STATUS::HEATING;
      }
      else
-     if (xpValue.index_of("W") >= 0)
+     if (xpValue.index_of("WW") >= 0)
      {
        _hp_state = LUX_HEATPUMP_STATUS::WW;
      }
      else
-     if (xpValue.index_of("AB") >= 0)
+     if (xpValue.index_of("ABT") >= 0)
      {
        _hp_state = LUX_HEATPUMP_STATUS::DEFROST;
      }

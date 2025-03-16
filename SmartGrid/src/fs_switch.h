@@ -1,3 +1,4 @@
+#pragma once
 
 #ifdef FS_LITTLEFS
 #include <LittleFS.h>

@@ -62,6 +62,7 @@ private:
 #ifdef WEB_APP
 extern AsyncWebLogClass AsyncWebLog;
 #else
+#pragma message("Info : NO WEB_APP --> USE HardwareSerial")
 extern HardwareSerial AsyncWebLog;
 #endif
 
