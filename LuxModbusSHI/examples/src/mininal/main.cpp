@@ -4,10 +4,12 @@ Example for read and write Luxtronik SHI (Smart-Home-Interface) with Modbus TCP
 
 #include <Arduino.h>
 #include <WiFi.h>
-
 #include "LuxModbusSHI.h"
-#include "cred.h"
 
+
+#define MY_SSID  "myssid"
+#define MY_PW    "mypassword"
+//#include "cred.h"
 
 /*
 // override LuxModbusSHI to modify readvalues()
@@ -39,13 +41,14 @@ void setup() {
   }
   Serial.printf("WiFi connected!, IP: %s\r\n", WiFi.localIP().toString().c_str());
   luxshi.init("192.168.2.101");
-  delay(1000);
-  luxshi.setHeatOffset(5);
+  delay(500);
+  luxshi.poll();
+  luxshi.setHeatOffset(5,0);
 }
 
 void loop() 
 {
-  luxshi.loop();
+  luxshi.poll();
   delay(2000);
 }
 
