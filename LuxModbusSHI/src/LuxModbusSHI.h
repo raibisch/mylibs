@@ -7,8 +7,6 @@
 
 #include "ModubusTCPClient/src/ModbusTCPClient.h"
 
-#define DEBUG_PRINT 1
-
 #ifdef DEBUG_PRINT
 #define debug_begin(...) Serial.begin(__VA_ARGS__);
 #define debug_print(...) Serial.print(__VA_ARGS__);
@@ -25,20 +23,22 @@
 
 enum SHI_MODBUS_REGISTER
 {
-  HEAT_MODE     = 10000,
-  HEAT_SETPOINT = 10001,
-  HEAT_OFFSET   = 10002,
+  SHI_HEAT_MODE     = 10000,
+  SHI_HEAT_SETPOINT = 10001,
+  SHI_HEAT_OFFSET   = 10002,
 
-  PC_MODE       = 10040,
-  PC_SETPOINT   = 10041
+  SHI_PC_MODE       = 10040,
+  SHI_PC_SETPOINT   = 10041
 };
 
 enum SHI_MODBUS_INPUT
 {
-  TEMP_RL       = 10100,
-  TEMP_RL_SOLL  = 10101,
-  TEMP_VL       = 10105,
-  TEMP_OUTDOOR  = 10108
+  SHI_TEMP_RL       = 10100,
+  SHI_TEMP_RL_SOLL  = 10101,
+  SHI_TEMP_VL       = 10105,
+  SHI_TEMP_OUTDOOR  = 10108,
+  SHI_PWR_HEAT_OUT  = 10300,
+  SHI_PWR_ELECT_IN  = 10301
 };
 
 class LuxModbusSHI: private ModbusTCPClient
@@ -49,30 +49,48 @@ class LuxModbusSHI: private ModbusTCPClient
     bool       _ipInitok = false;
    
   protected:
-    int _heat_setpoint  = 350;
-    int _heat_offset    = 0;
-    int _pc_setpoint    = 300;
-    int _temp_outdoor   = 0;
+    bool     _bSet_heat_mode = false;
+    uint16_t _heat_mode =  0;
+    uint16_t _heat_setpoint  = 350;
+    uint16_t _heat_offset    = 0;
 
+    bool     _bSet_pc_mode   = false;
+    uint16_t _pc_mode        = 0;
+    uint16_t _pc_setpoint    = 200;
+
+    int16_t  _temp_outdoor   = 0;
+    uint16_t _power_in       = 0;
+    uint16_t _power_out      = 0;
+
+   bool     writeHeatOffset(uint16_t tempx10, uint16_t mode);
+   bool     writePCSetpoint(uint16_t kwx10, uint16_t mode);
 
   public:
-   LuxModbusSHI(Client& clients) : ModbusTCPClient(clients) { _ipLux.clear();};
+   LuxModbusSHI(Client& clients) : ModbusTCPClient(clients) { };
    LuxModbusSHI() : LuxModbusSHI(_wificlient){};
    
    bool init(const char* sIP);
    bool poll();
 
-   int readRegister(SHI_MODBUS_REGISTER reg);
-   int readInput(SHI_MODBUS_INPUT reg);
+   int16_t readRegister(SHI_MODBUS_REGISTER reg);
+   int16_t readInput(SHI_MODBUS_INPUT reg);
    virtual void readValues();
-   
-   int getHeatSetpointX10() {return _heat_setpoint;};
-   int getHeatOffsetX10()   {return _heat_offset;};
-   int getTempOutdoorX10()  {return _temp_outdoor;};
-   int getPCSetpointX10()   {return _pc_setpoint;};
 
-   //bool     setHeatSetpoint(uint16_t tempx10);
-   bool     setHeatOffset(uint16_t tempx10, uint16_t mode);
-   bool     setPCSetpoint(uint16_t kwx10, uint16_t mode);
+  
+  void  setHeatOffset(uint16_t mode, uint16_t val){
+   _heat_mode=val; _heat_offset=val; _bSet_heat_mode=true;
+   debug_printf("[SHI] setHeatOffset mode:%d val:%d\r\n",mode, val)
+  };
+
+  void  setPCSetpoint(uint16_t mode, uint16_t val){
+    _pc_mode=val;   _pc_setpoint=val; _bSet_pc_mode=true;
+    debug_printf("[SHI] setPCSetpoint mode:%d val:%d\r\n",mode, val)
+  };
+
+
+  int16_t getHeatOffsetX10()   {return _heat_offset;};
+  int16_t getPCSetpoint()   {return _pc_setpoint;};
+
+  int16_t getTempOutdoorX10()  {return _temp_outdoor;};  
 };
 

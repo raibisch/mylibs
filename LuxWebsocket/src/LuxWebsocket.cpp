@@ -353,11 +353,11 @@ bool LuxWebsocket::XMLGETInfo(const char* cpFind, LUX_VAL_TYPE valtype, int endo
   bool bRet =  luxRxString.substringBeetween(xpValue,_tmpfind.c_str(), _tmpfind.length(), "</value>", endoffset);
   int pos1 = luxRxString.index_of(cpFind);
   bRet = luxRxString.substringBeetween(xpID, pos1-30, "<item id=", 10, cpFind, -8);
-#ifdef DEBUG_PRINT
+#ifdef DEBUG_PRINT_LUXWS
   _tmpfind.substringEndwith(_tmpfind, 0, "</name>");
    if (bRet > 0)
    {
-     Serial.printf("[LUX] %22s:\t ID: %9s   Value:%8s\r\n", _tmpfind.c_str(), xpID.c_str(), xpValue.c_str());
+     //debug_printf("[LUX] %22s:\t ID: %9s   Value:%8s\r\n", _tmpfind.c_str(), xpID.c_str(), xpValue.c_str());
    }
    else { debug_printluxvalerror(_tmpfind.c_str());}  
 #endif
@@ -377,7 +377,7 @@ bool LuxWebsocket::XMLGETInfo(int pos0, const char* cpFind, LUX_VAL_TYPE valtype
   {
      int pos1 = luxRxString.index_of(cpFind, pos0);
      int pos2 = luxRxString.index_of("</value>, pos1");
-     Serial.printf("[LUX] ERROR XMLGETInfo pos0:%d  pos1:%d, pos2:%d %22s:\t   Value:%18s\r\n", pos0, pos1, pos2,_tmpfind.c_str(), xpValue.c_str());
+     //debug_printf("[LUX] ERROR XMLGETInfo pos0:%d  pos1:%d, pos2:%d %22s:\t   Value:%18s\r\n", pos0, pos1, pos2,_tmpfind.c_str(), xpValue.c_str());
   }
 #endif
   int pos1 = luxRxString.index_of(cpFind, pos0);
@@ -386,7 +386,7 @@ bool LuxWebsocket::XMLGETInfo(int pos0, const char* cpFind, LUX_VAL_TYPE valtype
   _tmpfind.substringEndwith(_tmpfind, 0, "</name>");
    if (bRet > 0)
    {
-     Serial.printf("[LUX] %22s:\t ID: %9s   Value:%8s\r\n", _tmpfind.c_str(), xpID.c_str(), xpValue.c_str());
+     //debug_printf("[LUX] %22s:\t ID: %9s   Value:%8s\r\n", _tmpfind.c_str(), xpID.c_str(), xpValue.c_str());
    }
    else { debug_printluxvalerror(_tmpfind.c_str());}  
 #endif
@@ -401,7 +401,7 @@ bool  LuxWebsocket::XMLREFRESH(LUX_VAL_TYPE valtype, int endoffset)
   bool bRet = false;
   int pos0 = luxRxString.index_of(_idvalues[valtype].sID);
   XPString xpValue(_idvalues[valtype].sValue, sizeof(ID_VALUE_PAIR::sValue)-1);
-#ifdef DEBUG_PRINT
+#ifdef DEBUG_PRINT_LUXWS
   switch (valtype)
   {
      case LUX_VAL_TYPE::TEMP_VL_IST:
@@ -577,7 +577,7 @@ bool  LuxWebsocket::XMLREFRESH(LUX_VAL_TYPE valtype, int endoffset)
     break;
   }
    
-#ifdef DEBUG_PRINT
+#ifdef DEBUG_PRINT_LUXWS
    if (bRet)
    {
      Serial.printf("[LUX] %22s:\t ID: %9s   Value:%18s\r\n", _tmpfind.c_str(), _idvalues[valtype].sID, xpValue.c_str());
@@ -617,7 +617,7 @@ inline void LuxWebsocket::XMLParser()
      //xml_pos0 = luxRxString.index_of(LUX_XMLDEF_INFO);
      // Items ohne Text (vorher mit GET_INFO holen!)
      //debug_printf("[LUX] REFRESH: %s\r\n", luxRxString.c_str());
-     debug_println("[LUX] -- TEMPERATUREN: ---------");
+     //debug_println("[LUX] -- TEMPERATUREN: ---------");
      XMLREFRESH(TEMP_VL_IST,  -3);
      XMLREFRESH(TEMP_RL_IST,  -3);
      XMLREFRESH(TEMP_RL_SOLL, -3);
@@ -629,12 +629,12 @@ inline void LuxWebsocket::XMLParser()
      XMLREFRESH(TEMP_VD_IN,   -3);
      XMLREFRESH(TEMP_VD_HEI,  -3);
 
-     debug_println("[LUX] -- Eingänge: ------------");
+     //debug_println("[LUX] -- Eingänge: ------------");
      XMLREFRESH(HD_PRESSURE,  -4);
      XMLREFRESH(ND_PRESSURE,  -4);
      XMLREFRESH(PUMP_FLOW,    -4);
 
-     debug_println("[LUX] -- Ausgänge: -------------");
+     //debug_println("[LUX] -- Ausgänge: -------------");
      XMLREFRESH(OUTPUT_DEFROST, 0);
      XMLREFRESH(OUTPUT_WW,      0);
      XMLREFRESH(OUTPUT_VD_HEIZ, 0);
@@ -645,10 +645,10 @@ inline void LuxWebsocket::XMLParser()
      XMLREFRESH(VENT_RPM,      -4);
      XMLREFRESH(EEV_HEAT,      -2);
 
-     debug_println("[LUX] -- Ablaufzeiten: -------------");
+     //debug_println("[LUX] -- Ablaufzeiten: -------------");
      XMLREFRESH(WP_ONTIME,      0);
 
-    debug_println("[LUX] -- Anlagenstatus: ---------");
+    //debug_println("[LUX] -- Anlagenstatus: ---------");
     XMLREFRESH(POWER_OUT,      -3);
     XMLREFRESH(BETRIEBSZUSTAND, 0);
 #ifndef Luxtronik_V3_89
@@ -656,12 +656,12 @@ inline void LuxWebsocket::XMLParser()
     XMLREFRESH(DEFROST_PERCENT,-1);
     XMLREFRESH(DEFROST_LASTTIME,0);
 #endif  
-    debug_println("[LUX] -- kWh-OUT Wärmemenge:----");
+    //debug_println("[LUX] -- kWh-OUT Wärmemenge:----");
     XMLREFRESH(ENERGY_OUT_HE,  -4); 
     XMLREFRESH(ENERGY_OUT_WW,  -4);        
     XMLREFRESH(ENERGY_OUT_SUM, -4);   
 
-    debug_println("[LUX] -- kWh-IN Leistungsaufnahme:-");
+    //debug_println("[LUX] -- kWh-IN Leistungsaufnahme:-");
     XMLREFRESH(ENERGY_IN_HE,  -4); 
     XMLREFRESH(ENERGY_IN_WW,  -4);        
     XMLREFRESH(ENERGY_IN_SUM, -4);     

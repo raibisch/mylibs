@@ -3,11 +3,12 @@
 
 #include <Arduino.h>
 
-#include <WebSocketsClient.h>          // local lib without SSL based on https://github.com/Links2004/arduinoWebSockets
+#include "WebSocketsClient.h"         // local lib without SSL based on https://github.com/Links2004/arduinoWebSockets
 #include "ESP32ntp.h"
 #include "XPString.h"
 
-//#define LUX_DEBUG_PRINT 1
+//#define LUX_DEBUG_PRINT_LUXWS
+
 
 #define LUX_LOG_STRING2(...) sprintf(luxprintbuf,"[LUX] %s:\t %s\r\n",__VA_ARGS__, __VA_ARGS__);
 #define LUX_LOG_STRING1(...) sprintf(luxprintbuf,"[LUX] %s\r\n",__VA_ARGS__, __VA_ARGS__);
