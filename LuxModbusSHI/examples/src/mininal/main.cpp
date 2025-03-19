@@ -43,7 +43,7 @@ void setup() {
   luxshi.init("192.168.2.101");
   delay(500);
   luxshi.poll();
-  luxshi.setHeatOffset(5,0);
+  luxshi.setHeatOffset(5,2);
 }
 
 void loop() 
