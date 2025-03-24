@@ -68,6 +68,7 @@ void initHistory()
     SG_RULE_EPEX_HIGHLIMIT,
     //SG_RULE_PV_MIN_KW,  //  not implemented
     //SG_RULE_BAT_MIN_KW  //  not implemented
+    SG_RULE_OFF,          //  do not switch every hour
     SG_RULE_UNVALID = 0xFF
    };
 
@@ -111,9 +112,7 @@ class SmartGrid
     float flexprice_month [12] {0};
     float flexprice_monthday[32] {0};
     float flexprice_hour[24] {0};
-    /// sollte ersetzt werden durch:
-
-
+   
     //float fixprice_sum = 0;
     //float fixprice_day = 0;
     float fixprice_month[12] {0};
@@ -129,7 +128,6 @@ class SmartGrid
     bool _isLoaded = false;
     struct tm *_looptime_now_tm = NULL;
    
-  
     void GetSortedIndices(int16_t numbers[], int16_t indices[], uint16_t size);
     void GetSortedIndices2(int16_t numbers[], int16_t indices[], uint16_t begin, uint16_t end);
 
@@ -168,14 +166,17 @@ class SmartGrid
     void   loop(time_t* time_now);
     //String getPVData(tm time);
 
-   SG_HOUR_DATA smartgrid_hour[SG_HOURSIZE];
+    SG_HOUR_DATA smartgrid_hour[SG_HOURSIZE];
 
-   int16_t unsorted_userhour_price[SG_HOURSIZE];
-   int16_t sorted_epexhour_price[SG_HOURSIZE];
+    int16_t unsorted_userhour_price[SG_HOURSIZE];
+    int16_t sorted_epexhour_price[SG_HOURSIZE];
 
     // jetzt alles noch public ...
     virtual float getUserkWhFixPrice() {return 30.0;}; // override !
     void calcHourPrice(time_t* time_now, float akt_kwh);
+
+    bool bRule_OFF = false; // enable / disable rule based switching ever hour
+   
 
 
   #ifdef CALC_HOUR_ENERGYPRICE

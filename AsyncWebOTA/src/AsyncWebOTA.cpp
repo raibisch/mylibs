@@ -285,12 +285,10 @@ void AsyncWebOTAClass::begin(AsyncWebServer *server, const char* url)
     #endif
 }
 
-
 void AsyncWebOTAClass::progress(int iprogress){
     String sprogress = String(iprogress);
     _events->send(String(sprogress).c_str(),"otaprogress", millis());
 }
-
 
 #if defined(WebLog_DEBUG)
     void WebOTAClass::DEBUG_WEB_SERIAL(const char* message){

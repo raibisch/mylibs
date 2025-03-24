@@ -41,11 +41,6 @@ private:
     AsyncWebServer *_server;
     AsyncEventSource *_events; // use Server Send Events (SSE)
     
-    // by JG: not implemented ...and no need for Logging ;-)
-    // if you need two-way communication use websocket
-    //AsyncWebSocket *_ws;     
-    //RecvMsgHandler _RecvFunc = NULL;
-    
     #if defined(WEBSERIAL_DEBUG)
         void DEBUG_WEB_SERIAL(const char* message);
     #endif

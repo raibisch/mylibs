@@ -25,7 +25,7 @@ ModbusClient::ModbusClient(unsigned long defaultTimeout) :
   _mb(NULL),
   _timeout(defaultTimeout),
   _defaultId(0x00),
-  _transmissionBegun(false),
+  _transmissionBegin(false),
   _values(NULL),
   _available(0),
   _read(0),
@@ -62,7 +62,7 @@ int ModbusClient::begin(modbus_t* mb, int defaultId)
     return 0;
   }
 
-  _transmissionBegun = false;
+  _transmissionBegin = false;
   _available = 0;
   _read = 0;
   _availableForWrite = 0;
@@ -236,7 +236,7 @@ int ModbusClient::beginTransmission(int id, int type, int address, int nb)
 
   memset(_values, 0x00, nb * valueSize);
 
-  _transmissionBegun = true;
+  _transmissionBegin = true;
   _id = id;
   _type = type;
   _address = address;
@@ -252,7 +252,7 @@ int ModbusClient::beginTransmission(int id, int type, int address, int nb)
 
 int ModbusClient::write(unsigned int value)
 {
-  if (!_transmissionBegun || _availableForWrite <= 0) {
+  if (!_transmissionBegin || _availableForWrite <= 0) {
     return 0;
   }
 
@@ -276,7 +276,7 @@ int ModbusClient::write(unsigned int value)
 
 int ModbusClient::endTransmission()
 {
-  if (!_transmissionBegun) {
+  if (!_transmissionBegin) {
     return 0;
   }
 
@@ -297,7 +297,7 @@ int ModbusClient::endTransmission()
       return 0;
   }
 
-  _transmissionBegun = false;
+  _transmissionBegin = false;
   _available = 0;
   _read = 0;
   _availableForWrite = 0;
@@ -359,7 +359,7 @@ int ModbusClient::requestFrom(int id, int type, int address, int nb)
     return 0;
   }
 
-  _transmissionBegun = false;
+  _transmissionBegin = false;
   _type = type;
   _available = nb;
   _read = 0;

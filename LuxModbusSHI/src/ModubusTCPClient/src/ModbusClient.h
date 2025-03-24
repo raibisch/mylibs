@@ -214,7 +214,7 @@ private:
   unsigned long _timeout;
   int _defaultId;
 
-  bool _transmissionBegun;
+  bool _transmissionBegin;
   int _id;
   int _type;
   int _address;

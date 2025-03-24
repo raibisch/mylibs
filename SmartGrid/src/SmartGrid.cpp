@@ -70,9 +70,17 @@ bool SmartGrid::calcSmartGridfromConfig(const char* psSGRule)
     hour2 = hour2 + 24;
    }
    //debug_printf("RULE-String: %s\r\n", sgRuleMode.c_str());
+   
 
    if ((hour1 >= 0 && hour1 < SG_HOURSIZE) && (hour2 >=0 && hour2 < SG_HOURSIZE) && (var1 > 0))
    {
+      if (sgRuleMode.index_of("OFF") >=0)
+      {
+        // disable rule switching every hour
+        debug_println("Rule OFF");
+        rule = SG_RULE_OFF;
+      }
+      else
       if (sgRuleMode.index_of("FIX") == 0)
       {
         debug_println("RULE: FIX");
@@ -116,7 +124,13 @@ bool SmartGrid::calcSmartGridfromConfig(const char* psSGRule)
    }
 
    debug_printf("calcSGReadyTime hour1:%d hour2:%d mode=%d  var2:%d  rulemode:%d\r\n", hour1, hour2, var1, var2, uint(rule));
-
+   if (rule == SG_RULE_OFF)
+   {
+     // no not switch every hour
+     bRule_OFF = true;
+     return true;
+   }
+   else
    if (rule == SG_RULE_FIX)
    {
     for (size_t i = hour1; i <= hour2; i++)
@@ -843,7 +857,7 @@ void SmartGrid::loop(time_t* time_now)
     if ((_looptime_now_tm->tm_hour == 15) && (_looptime_now_tm->tm_min==1) && (_looptime_now_tm->tm_sec < 7))
     { 
       refreshWebData(true);
-      delay(2000);
+      delay(1000);
       return;
     }
 
@@ -856,7 +870,7 @@ void SmartGrid::loop(time_t* time_now)
       updateCost_monthday(_looptime_now_tm->tm_mday); 
       updateCost_month(_looptime_now_tm->tm_mon);
   #endif
-      delay(2000);
+      delay(1000);
       return;
     }
 
@@ -870,12 +884,14 @@ void SmartGrid::loop(time_t* time_now)
       if (this->sHourValueNext.indexOf("999") && _looptime_now_tm->tm_hour > 15)
       {_bUpdate = true;}
       
-      setAppOutputFromRules(_looptime_now_tm->tm_hour);
-      delay(2000);
+      if (!bRule_OFF)
+      {
+       setAppOutputFromRules(_looptime_now_tm->tm_hour);
+      }
+      delay(1000);
       return;
     }
-   
-
+    
     if (_bUpdate) // extra Bool for init at startup
     {
       _bUpdate = false;
@@ -891,7 +907,11 @@ void SmartGrid::loop(time_t* time_now)
       }
 
       getAppRules(); //aus Config.txt daten auswerten und parameter setzten
-      setAppOutputFromRules(_looptime_now_tm->tm_hour);
+      if (!bRule_OFF)
+      {
+       setAppOutputFromRules(_looptime_now_tm->tm_hour);
+      }
+
     }
   
 }
