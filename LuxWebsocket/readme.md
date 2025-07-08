@@ -1,0 +1,2 @@
+ACHTUNG Info für alle die eine Kommunikation mit der Luxtronik über Websocket nutzen:
+In der neuen Firmware-Version V3.91.0 ist der Websocket-Antwort-String von XML auf JSON umgestellt worden. Die Umstellung auf JSON ist ja erst mal zu begrüßen, aber leider müssen alle Programme die Websocket nutzen jetzt erst mal angepasst werden (gut wenn man das selber anpacken kann ;-)...alle Programme die die binäre Schnittstelle ("Java-Interface") Nutzen sind nicht betroffen...auch die Modbus-Kommunikation (SHI) funktioniert noch ohne Probleme
