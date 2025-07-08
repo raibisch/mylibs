@@ -20,7 +20,7 @@ Register zählweise: 0-based ...oder +1 for 1-based (z.B. für modpoll).
 | MK1Heiz. Offset   [0,1 K]                     | 10002    | 0        | 
 | ...                                           |          |          |
 | LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]| 10040   | 0        |
-| PC Limit 0.1 kW ->0 - 300                     | 100042   | 300      |
+| PC Limit 0.1 kW ->0 - 300                     | 10042   | 300      |
 | ...                                           |          |          |
 | Sperre Kühlung    [0=Aus;1=Ein]               | 10052   | 0        |
 | Sperre Schwimmbad [0=Aus;1=Ein]               | 10053   | 0        |
