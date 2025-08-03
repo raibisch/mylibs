@@ -3,7 +3,7 @@
 
 ## MODBUS 'Holding-Register' (read and write): 
 
-Register zählweise: 0-based ...oder +1 for 1-based (z.B. für modpoll).
+Register zählweise: hier:'0'-based ...oder +1 for '1'-based (z.B. für modpoll).
  
 | Function                                      | Register | def.-val |
 | :---------------------------------------------|---------:| :--------| 
@@ -15,15 +15,15 @@ Register zählweise: 0-based ...oder +1 for 1-based (z.B. für modpoll).
 | WW Setpoint [0.1 K]                           | 10006    | 400      |
 | WW Offset   [0.1 K]                           | 10007    | 0        |
 | ...                                           |          |          |
-| MK1Heiz.Mode [0=Aus;1=Setpoint;2=Offset]      | 10000    | 0        |
-| MK1Heiz. Setpoint [0,1 K]                     | 10001    | 350      |
-| MK1Heiz. Offset   [0,1 K]                     | 10002    | 0        | 
+| MK1Heiz.Mode [0=Aus;1=Setpoint;2=Offset]      | 10008    | 0        |
+| MK1Heiz. Setpoint [0,1 K]                     | 10009    | 350      |
+| MK1Heiz. Offset   [0,1 K]                     | 10010    | 0        | 
 | ...                                           |          |          |
-| LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]| 10040   | 0        |
-| PC Limit 0.1 kW ->0 - 300                     | 10042   | 300      |
+| LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]| 10040   | 0         |
+| PC Limit 0.1 kW ->0 - 300                     | 10041   | 300       |
 | ...                                           |          |          |
-| Sperre Kühlung    [0=Aus;1=Ein]               | 10052   | 0        |
-| Sperre Schwimmbad [0=Aus;1=Ein]               | 10053   | 0        |
+| Sperre Kühlung    [0=Aus;1=Ein]               | 10052   | 0         |
+| Sperre Schwimmbad [0=Aus;1=Ein]               | 10053   | 0         |
 
 
 ## MODBUS 'Input-Register' (read):
