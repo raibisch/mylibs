@@ -1,30 +1,47 @@
 
+
 # Luxtronik Smart-Home-Interface (SHI) MODBUS-TCP
 
 ## MODBUS 'Holding-Register' (read and write): 
 
-Register zählweise: hier:'0'-based ...oder +1 for '1'-based (z.B. für modpoll).
+Register zählweise: 0-based ...oder +1 for 1-based (z.B. für modpoll).
  
-| Function                                      | Register | def.-val |
-| :---------------------------------------------|---------:| :--------| 
-| Heiz.Mode [0=Aus;1=Setpoint;2=Offset]         | 10000    | 0        |
-| Heiz. Setpoint [0.1 K]                        | 10001    | 350      |
-| Heiz. Offset   [0.1 K]                        | 10002    | 0        | 
-| ...                                           |          |          |
-| WW Mode   [0=Aus;1=Setpoint;2=Offset]         | 10005    | 0        |
-| WW Setpoint [0.1 K]                           | 10006    | 400      |
-| WW Offset   [0.1 K]                           | 10007    | 0        |
-| ...                                           |          |          |
-| MK1Heiz.Mode [0=Aus;1=Setpoint;2=Offset]      | 10008    | 0        |
-| MK1Heiz. Setpoint [0,1 K]                     | 10009    | 350      |
-| MK1Heiz. Offset   [0,1 K]                     | 10010    | 0        | 
-| ...                                           |          |          |
-| LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]| 10040   | 0         |
-| PC Limit 0.1 kW ->0 - 300                     | 10041   | 300       |
-| ...                                           |          |          |
-| Sperre Kühlung    [0=Aus;1=Ein]               | 10052   | 0         |
-| Sperre Schwimmbad [0=Aus;1=Ein]               | 10053   | 0         |
+| Funktion                                        | Register | def.-val |
+| :-----------------------------------------------|---------:| :--------| 
+| HZ Mode [0=Aus;1=Setpoint;2=Offs.;3=Level*]     | 10000    | 0        |
+| HZ Setpoint [0.1 K]                             | 10001    | 350      |
+| HZ Offset   [0.1 K]                             | 10002    | 0        | 
+| HZ Level    [0..3 ??] *                         | 10003    |          |
+| ...                                             |          |          |
+| WW Mode [0=Aus;1=Setpoint;2=Offs.;3=Level*]     | 10005    | 0        |
+| WW Setpoint [0.1 K]                             | 10006    | 400      |
+| WW Offset   [0.1 K]                             | 10007    | 0        |
+| WW Level    [0..3 ??] *                         | 10008    | 0        |
+|...                                              |          |          |
+| MK1Heiz.Mode[0=Aus;1=Setpoint;2=Offs.;3=Level*] | 10000    | 0        |
+| MK1Heiz. Setpoint [0,1 K]                       | 10001    | 350      |
+| MK1Heiz. Offset   [0,1 K]                       | 10002    | 0        | 
+| ...                                             |          |          |
+| LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]  | 10040    | 0        |
+| PC Limit 0.1 kW ->0 - 300                       | 10041    | 300      |
+| ...                                             |          |          |
+| Sperre Heizung    [0=AUS;1=EIN] *               | 10050    | 0        |
+| Sperre WW         [0=AUS;1=EIN] *               | 10050    | 0        |
+| Sperre Kühlung    [0=Aus;1=Ein]                 | 10052    | 0        |
+| Sperre Schwimmbad [0=Aus;1=Ein]                 | 10053    | 0        |
+| ...                                             |          |          |
+| HZ Overall Mode[0=Aus;1=Setp.;2=Offs.;3=Level]* | 10065    | 0        |
+| HZ Overall Offset  [0.1]   ??                 * | 10066    | 0        |
+| ...                                             |          |          |
+| Zirkulation [0=AUS;1=EIN] ??    *               | 10070    | 0        |
+| Extra Warmwasser [0=AUS;1=EIN]  *               | 10071    | 0        |
+ 
+ Extra Warmwasser (=1) setzt sicht nach WW-Ende automatisch zurueck (=0)
 
+(*) ab V3.92.0   
+
+(??) noch nicht getestet oder unklar
+HZ Level, WW Level: vermutlich setzen von voreingestellten SG-Ready Level.
 
 ## MODBUS 'Input-Register' (read):
 
@@ -33,11 +50,11 @@ Register zählweise: hier:'0'-based ...oder +1 for '1'-based (z.B. für modpoll)
 |(??)                              |  10000  |  1        |
 |...
 |Betriebsart 1..5  (*1)            |  10002  |  0...5    |
-|HEI=3 WW=2 1? ABT=2 OFF=1         |  10003  |  3, 2     |
-|HEI=1 WW=3    ABT=1 OFF=1         |  10004  |  1, 3     |
+|Heiz=3 WW=2   ABT=2 OFF=1  ??     |  10003  |  3, 2     |
+|Heiz=1 WW=3   ABT=1 OFF=1  ??     |  10004  |  1, 3     |
 |...
-|              ??                  |  10006  |  0        |
-|              ??                  |  10007  |  0        |
+|  ??                              |  10006  |  0        |
+|  ??                              |  10007  |  0        |
 |...
 |Temp. x10 RL-Soll                 |  10100  |  241      |
 |Temp. x10 RL-Ist                  |  10101  |  243      |
@@ -77,25 +94,34 @@ Register zählweise: hier:'0'-based ...oder +1 for '1'-based (z.B. für modpoll)
 |           input_reg37            |  10205  |   0       |
 |           input_reg38            |  10206  |   0       |
 |           input_reg39            |  10207  |   0       |
+|...            
+|kW x10 akt.-OUT Heiz. (3.4kW=34)  |  10300  |  34       |
+|kW x10 akt.-In  Elekt.(0.8kW=8)   |  10301  |   8       |
+|kW x10 minimal ??                 |  10302  |   6       |
 |...
-|kW x10 Power-OUT Heiz. (3.4kW=34) |  10300  |  34       |
-|kW x10 Power-In  Elekt.(0.8kW=8)  |  10301  |   8       |
-|? x10 Power-In min ??             |  10302  |   6       |
+|kWh x10 (IN) elekt.Arbeit Ges.    |  10310  | 28044     |
+|(32bit-Uint)                      |  10311  |           |        
+|kWh x10 (IN) elekt.Arbeit Heiz.   |  10312  | 23736     |
+|(32bit-Uint)                      |  10313  |           |
+|kWh x10 (IN) elekt.Arbeit WW      |  10314  | 4307      |
+|(32bit-Uint)                      |  10315  |           |
 |...
-| ??                               |  10310  |   0       |
-|kWh x10 Elekt. Arbeit Ges.        |  10311  | 24321     |
-| ??                               |  10312  |   0       |
-|kWh x10 Elekt. Arbeit Heiz        |  10313  | 21314     |
-| ??                               |  10314  |   0       |
-|kWh x10 Elekt. Arbeit WW          |  10315  |  3007     |
-| ??                               |  10316  |   0       |
-| ??                               |  10317  |   0       |
-| ??                               |  10318  |   0       |
-| ??                               |  10319  |   0       |
+|kWh x10 (OUT) Heiz.Arbeit Ges.    |  10320  | 104641    |
+|(32bit-Uint)                      |  10321  |           |
+|kWh x10 (OUT) Heiz.Arbeit Heiz.   |  10322  | 88713     |
+|(32bit-Uint)                      |  10323  |           |
+|kWh x10 (OUT) Heiz.Arbeit WW      |  10324  | 15929     |
+|(32bit-Uint)                      |  10325  |           |
+| ...            
+| ??                               |  10350  |   1       |
+| ....
+| ??                               |  10356  |   32511   |
+| ??                               |  10360  |   1       |
+| ??                               |  10261  |   0       |
 |...
 | Firmware V3.xx-x                 |  10400  |   3       |
-| Firmware Vx.90-x                 |  10401  |  90       |
-| Firmware Vx.xx-4                 |  10402  |   4       | 
+| Firmware Vx.92-x                 |  10401  |  92       |
+| Firmware Vx.xx-0                 |  10402  |   0       | 
 
 (*1) Input-Register 10002:   
 0 = Heiz  
@@ -107,6 +133,6 @@ Register zählweise: hier:'0'-based ...oder +1 for '1'-based (z.B. für modpoll)
 6 = Ext Quelle  
 7 = Kühlung  
 
-
+(??) noch nicht getestet oder unklar
 
 [back -->  LuxtronikSHI howto](LuxtronikSHI.md)
