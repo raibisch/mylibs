@@ -17,9 +17,9 @@ Register zählweise: 0-based ...oder +1 for 1-based (z.B. für modpoll).
 | WW Offset   [0.1 K]                             | 10007    | 0        |
 | WW Level    [0..3 ??] *                         | 10008    | 0        |
 |...                                              |          |          |
-| MK1Heiz.Mode[0=Aus;1=Setpoint;2=Offs.;3=Level*] | 10000    | 0        |
-| MK1Heiz. Setpoint [0,1 K]                       | 10001    | 350      |
-| MK1Heiz. Offset   [0,1 K]                       | 10002    | 0        |
+| MK1Heiz.Mode[0=Aus;1=Setpoint;2=Offs.;3=Level*] | 10010    | 0        |
+| MK1Heiz. Setpoint [0,1 K]                       | 10011    | 350      |
+| MK1Heiz. Offset   [0,1 K]                       | 10012    | 0        |
 | ...                                             |          |          |
 | LPC Mode[0=No-Limit;1=Soft-Limit;2=Hard-Limit]  | 10040    | 0        |
 | PC Limit 0.1 kW ->0 - 300                       | 10041    | 300      |
@@ -40,7 +40,10 @@ Extra Warmwasser (=1) setzt sicht nach WW-Ende automatisch zurueck (=0)
 (*) ab V3.92.0
 
 (??) noch nicht getestet oder unklar
+
 HZ Level, WW Level: vermutlich setzen von voreingestellten SG-Ready Level.
+[0 = EVU; 1 = Absenkung; 2 = Normal; 3 = Anhebung]
+
 
 ## MODBUS 'Input-Register' (read)
 
