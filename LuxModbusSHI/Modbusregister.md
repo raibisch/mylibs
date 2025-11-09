@@ -113,7 +113,7 @@ HZ Level, WW Level: vermutlich setzen von voreingestellten SG-Ready Level.
 |kWh x10 (OUT) Heiz.Arbeit Heiz(LW)|  10322  | 88713     |
 |(32bit-Uint)                  (HW)|  10323  |           |
 |kWh x10 (OUT) Heiz.Arbeit WW  (LW)|  10324  | 15929     |
-|(32bit-Uint)                  (LW)|  10325  |           |
+|(32bit-Uint)                  (HW)|  10325  |           |
 | ...            
 | ??                               |  10350  |   1       |
 | ....
@@ -135,7 +135,7 @@ HZ Level, WW Level: vermutlich setzen von voreingestellten SG-Ready Level.
 6 = Ext Quelle  
 7 = Kühlung  
 
-(32bit-Uint) = Decodierung: H-Word <<16(16Bitleft-shift) + LWord
+(LW) (HW) (=32bit-Uint) = Decodierung: HW <<16(16Bitleft-shift) + LW
 
 (??) noch nicht getestet oder unklar
 
