@@ -63,8 +63,8 @@ HZ Level, WW Level: vermutlich setzen von voreingestellten SG-Ready Level.
 |Status-Kuehlung                   |  10006  |  0        |
 |Status-Schwimmbad                 |  10007  |  0        |
 |..
-|Temp x10 RL-Soll                  |  10100  |  241      |
-|Temp x10 RL-Ist                   |  10101  |  243      |
+|Temp x10 RL-Ist                   |  10100  |  241      |
+|Temp x10 RL-Soll                  |  10101  |  243      |
 |Temp x10 RL-Ext-Ist               |  10102  |   50      |
 |Temp x10 RL Begrenzung            |  10103  |  380      |
 |Temp x10 RLmin. Rueckl Soll       |  10104  |  150      | 
